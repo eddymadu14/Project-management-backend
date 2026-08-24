@@ -8,7 +8,6 @@ import morgan from "morgan";
 // Routes
 import userRoutes from './routes/userRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
-import subscriptionRoutes from "./routes/subscriptionRoutes.js";
 import discordRoutes from "./routes/discordRoutes.js";
 import telegramRoutes from "./routes/telegramRoutes.js";
 import logRoutes from "./routes/logRoutes.js";
@@ -56,18 +55,7 @@ app.use(requestLogger);
 
 
 // For Stripe webhook - we need raw body
-app.post(
-  "/api/subscriptions/webhook/stripe",
-  express.raw({ type: "application/json" }),
-  (req, res, next) => {
-    // delegate to route handler imported from subscriptionRoutes
-    // but since we used raw here we must call the controller directly or let routing forward
-    // We'll forward to the controller by attaching to req.rawBody:
-    req.rawBody = req.body;
-    // require the controller to handle - but easiest is to mount the router below; this route will be handled by controller reading req.rawBody
-    next();
-  }
-);
+
 
 
 // Error Handling
@@ -75,7 +63,6 @@ app.use(errorHandler);
 
 // Mount routes (stripe webhook route defined above will still be handled by subscriptionRoutes if mounted)
 // app.use("/api/auth", authRoutes);
-app.use("/api/subscriptions", subscriptionRoutes);
 app.use("/api/discord", discordRoutes);
 app.use("/api/telegram", telegramRoutes);
 app.use("/api/logs", logRoutes);
