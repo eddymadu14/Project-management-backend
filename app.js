@@ -8,8 +8,6 @@ import morgan from "morgan";
 // Routes
 import userRoutes from './routes/userRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
-import discordRoutes from "./routes/discordRoutes.js";
-import telegramRoutes from "./routes/telegramRoutes.js";
 import logRoutes from "./routes/logRoutes.js";
 import taskRoutes from "./routes/taskRoutes.js";
 import teamRoutes from "./routes/teamRoutes.js";
@@ -18,7 +16,6 @@ import projectRoutes from "./routes/projectRoutes.js";
 
 import errorHandler from "./middleware/errorHandler.js";
 import requestLogger from "./middleware/requestLogger.js";
-import webhookRoutes from "./routes/webhookRoutes.js";
 
 dotenv.config();
 
@@ -39,8 +36,8 @@ const __dirname = path.dirname(__filename);
 app.use(express.json());
 
 //discord and telegram
-app.use("/api/discord", discordRoutes);
-app.use("/api/telegram", telegramRoutes);
+//app.use("/api/discord", discordRoutes);
+//app.use("/api/telegram", telegramRoutes);
 app.use("/api/teams", teamRoutes);
 
 //for frontend 
@@ -63,8 +60,8 @@ app.use(errorHandler);
 
 // Mount routes (stripe webhook route defined above will still be handled by subscriptionRoutes if mounted)
 // app.use("/api/auth", authRoutes);
-app.use("/api/discord", discordRoutes);
-app.use("/api/telegram", telegramRoutes);
+//app.use("/api/discord", discordRoutes);
+//app.use("/api/telegram", telegramRoutes);
 app.use("/api/logs", logRoutes);
 
 // Mount routes

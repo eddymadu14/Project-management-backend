@@ -3011,3 +3011,5 @@
 2026-08-24 17:42:04 [[32minfo[39m] : GET /api/tasks/project/6a8c3ccfbd6f4d5b94672650 304 - 15ms
 2026-08-24 17:42:48 [[32minfo[39m] : GET /api/projects 304 - 14ms
 2026-08-24 17:42:48 [[32minfo[39m] : GET /api/projects 304 - 12ms
+2026-08-24 21:19:41 [[32minfo[39m] : GET /api/projects 401 - 14ms
+2026-08-24 21:19:41 [[32minfo[39m] : GET /api/projects 401 - 10ms
