@@ -3110,3 +3110,11 @@
 2026-08-25 19:12:43 [[32minfo[39m] : GET /api/projects 304 - 211ms
 2026-08-25 22:05:12 [[32minfo[39m] : POST /api/users/register 201 - 387ms
 2026-08-25 22:08:09 [[32minfo[39m] : POST /api/users/register 201 - 210ms
+2026-08-25 22:16:13 [[32minfo[39m] : POST /api/users/register 201 - 5942ms
+2026-08-25 23:07:28 [[32minfo[39m] : POST /api/users/register 201 - 8924ms
+2026-08-25 23:15:23 [[32minfo[39m] : POST /api/users/login 403 - 282ms
+2026-08-25 23:21:05 [[32minfo[39m] : POST /api/users/login 200 - 397ms
+2026-08-25 23:21:07 [[32minfo[39m] : GET /api/projects 200 - 1434ms
+2026-08-25 23:21:07 [[32minfo[39m] : GET /api/projects 304 - 128ms
+2026-08-25 23:21:49 [[32minfo[39m] : POST /api/users/register 201 - 2788ms
+2026-08-25 23:23:31 [[32minfo[39m] : POST /api/users/register 400 - 56ms

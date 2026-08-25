@@ -65,7 +65,7 @@ const registerUser = asyncHandler(async (req, res) => {
       success: true,
       requiresVerification: true,
       message:
-        "Account created. Please check your email to verify your account.",
+        "Please check your email to verify your account.",
     });
 
   } catch (emailError) {
