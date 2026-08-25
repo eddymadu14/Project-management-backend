@@ -4,9 +4,13 @@ import asyncHandler from 'express-async-handler';
 import parseDuration from 'parse-duration';
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+
+import {
+  sendVerificationEmail,
+} from "../services/emailService.js";
 import { generateVerificationToken } from '../utils/generateVerificationToken.js';
 import { generateAccessToken, generateRefreshToken, hashToken } from '../utils/generateAccessToken.js';
-import { sendVerificationEmail, resendVerificationEmail } from './emailController.js';
+import { resendVerificationEmail } from './emailController.js';
 import { forgotPassword, resetPassword } from './passwordController.js';
 import ApiError from "../utils/ApiError.js";
 import catchAsync from "../utils/catchAsync.js";
@@ -15,48 +19,71 @@ import catchAsync from "../utils/catchAsync.js";
 // REGISTER CONTROLLER
 // =============================
 
+
 const registerUser = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
 
-  // Basic validation
   if (!name || !email || !password) {
-    return res.status(400).json({ success: false, message: "Name, email and password are required." });
-  }
-
-  // Check if user already exists
-  const existingUser = await User.findOne({ email });
-  if (existingUser) {
-    return res.status(400).json({ success: false, message: "User already exists." });
-  }
-
-  // Create new user (password is already handled in model)
-  const newUser = await User.create({
-    name,
-    email,
-    password,
-    isVerified: true,
-  });
-  
- console.log(`User created: ${newUser._id} - ${newUser.email}`);
-
-  // Send verification email
-  try {
-    const token = generateVerificationToken(newUser._id);
-    await sendVerificationEmail(newUser.email, token);
-    console.log(`Verification email sent to ${newUser.email}`);
-
-    // ✅ Respond with email verification success
-    return res.status(201).json({
-      success: true,
-      message: `Verification email sent to ${newUser.email}.`,
+    return res.status(400).json({
+      success: false,
+      message: "Name, email and password are required.",
     });
-  } catch (emailErr) {
-    console.error("Failed to send verification email:", emailErr);
+  }
 
-    // ⚠️ Respond with email verification failure
+  const normalizedEmail = email.trim().toLowerCase();
+
+  const existingUser = await User.findOne({
+    email: normalizedEmail,
+  });
+
+  if (existingUser) {
+    return res.status(400).json({
+      success: false,
+      message: "User already exists.",
+    });
+  }
+
+  const newUser = await User.create({
+    name: name.trim(),
+    email: normalizedEmail,
+    password,
+    isVerified: false,
+  });
+
+  try {
+    const token = generateVerificationToken(
+      newUser._id
+    );
+
+    await sendVerificationEmail({
+      recipientEmail: newUser.email,
+      recipientName: newUser.name,
+      token,
+    });
+
     return res.status(201).json({
       success: true,
-      message: `Failed to send verification email. Please try resending verification.`,
+      requiresVerification: true,
+      message:
+        "Account created. Please check your email to verify your account.",
+    });
+
+  } catch (emailError) {
+    console.error(
+      "Verification email failed:",
+      emailError
+    );
+
+    /*
+      Account was successfully created.
+      Don't pretend registration failed.
+    */
+    return res.status(201).json({
+      success: true,
+      requiresVerification: true,
+      emailDeliveryFailed: true,
+      message:
+        "Account created, but we couldn't send the verification email. Please request a new verification email.",
     });
   }
 });

@@ -3,7 +3,7 @@ import express from 'express';
 import User from '../models/userModel.js';
 import { registerUser, authUser, getUserProfile, logout} from '../controllers/userController.js';
 import protect from '../middleware/authMiddleware.js';
-import { sendVerificationEmail, verifyEmail, resendVerificationEmail } from "../controllers/emailController.js";
+import {  verifyEmail, resendVerificationEmail } from "../controllers/emailController.js";
 import { forgotPassword, resetPassword } from "../controllers/passwordController.js";
 import { AuthSchemas, UserSchemas} from "../validators/index.js";
 import { validateRequest } from "../middleware/validateRequest.js";
@@ -24,7 +24,6 @@ router.get('/profile', protect, getUserProfile);
 
 //router.get('/profile', protect, getUserProfile);
 router.post("/resend-verification", resendVerificationEmail);
-router.post("/verification", sendVerificationEmail);
 router.post("/discord/add", protect, planGuard("discord"), addDiscordServer);
 // router.get("/verify/:token", verifyEmail);
 
