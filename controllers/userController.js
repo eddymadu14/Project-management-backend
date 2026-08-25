@@ -34,7 +34,7 @@ const registerUser = asyncHandler(async (req, res) => {
     name,
     email,
     password,
-    isVerified: false,
+    isVerified: true,
   });
   
  console.log(`User created: ${newUser._id} - ${newUser.email}`);
